@@ -86,7 +86,7 @@ def download(city, city_name, year):  # 爬取城市的总平均信息
         dict_final = {"city_name": city_name, "area": "1", "year": dates[i].text[0:4], "month": dates[i].text[5:7],
                       "price": prices[i].text, "trendency": trendency[i].text, "province": province_name}
         output_data = pd.DataFrame(dict_final, index=[0])
-        output_data.to_csv(province+'.csv', mode='a', header=None)
+        output_data.to_csv('data/'+province+'.csv', mode='a', header=None)
 
 if __name__ == "__main__":
     city_names, citys = get_city_list(url)
