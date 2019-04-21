@@ -77,25 +77,22 @@ def download(city, city_name, year):  # 爬取城市的总平均信息
     req.close()
     bf = BeautifulSoup(html, 'html.parser')
     div_own = bf.find('div', class_='fjlist-box boxstyle2')
-    try:
-        dates = div_own.find_all('b')
-        prices = div_own.find_all('span')
-        trendency = div_own.find_all('em')
-        # 操作数据库
-        # client = pymongo.MongoClient('localhost', 27017)
-        # db = client["HousePriceHistory"]  # 连接数据库
-        global province  # 用全局变量
-        global province_name
-        # col = db[province + city]  # 操作相应的集合
-        for i in range(len(dates)):  # 插入数据
-            dict_final = {"city_name": city_name, "area": "1", "year": dates[i].text[0:4], "month": dates[i].text[5:7],
-                          "price": prices[i].text, "trendency": trendency[i].text, "province": province_name}
-            output_data = pd.DataFrame(dict_final, index=[0])
-            output_data.to_csv(province_name+'.csv', mode='a', header=None)
-            # print(output_data.head())
-            # col.insert_one(dict_final)
-    except AttributeError:
-        print('日期提取失败')
+    dates = div_own.find_all('b')
+    prices = div_own.find_all('span')
+    trendency = div_own.find_all('em')
+    # 操作数据库
+    # client = pymongo.MongoClient('localhost', 27017)
+    # db = client["HousePriceHistory"]  # 连接数据库
+    global province  # 用全局变量
+    global province_name
+    # col = db[province + city]  # 操作相应的集合
+    for i in range(len(dates)):  # 插入数据
+        dict_final = {"city_name": city_name, "area": "1", "year": dates[i].text[0:4], "month": dates[i].text[5:7],
+                      "price": prices[i].text, "trendency": trendency[i].text, "province": province_name}
+        output_data = pd.DataFrame(dict_final, index=[0])
+        output_data.to_csv(province_name+'.csv', mode='a', header=None)
+        # print(output_data.head())
+        # col.insert_one(dict_final)
 
 
 def download_areas(city, city_name, year, area, name):  # 爬取城市各个区域的信息
@@ -150,6 +147,6 @@ if __name__ == "__main__":
             #     # 爬取南京所属所有区的房价信息
             #     download_areas(city=city, city_name=city_name, year=year, area=areas[i], name=names[i])
             year -= 1
-            time.sleep(10)
+            time.sleep(20)
         print(city_name, "的房价数据下载成功!")
     print("下载成功！")
